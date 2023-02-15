@@ -14,43 +14,23 @@ export const Home = () => {
 
   const [pokemonList, updatePokemonList] = useState<PokemonInfo[]>([])
 
-  function fetchPokemons() {
-    return fetch("http://localhost:8000/pokemons", { headers: { accept: "application/json" } }).then(response =>
-      response.json(),
-    )
+  async function fetchPokemons() {
+    const response = await fetch("http://localhost:8000/pokemons", { headers: { accept: "application/json" } })
+    return response.json()
   }
 
   useEffect(() => {
     fetchPokemons().then(updatePokemonList)
   }, [])
 
-  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
-    setFilterValue(event.target.value)
-  }
-
-  function filterPokemonsByNameorId(pokemons: PokemonInfo[], filter: string) {
-    return pokemonList.map(({ name, id }) => {
-      if (name.toUpperCase().startsWith(filter.toUpperCase()) || id.toString().startsWith(filter))
-        return <Pokemon key={id} name={name} idPokemon={id} />
-    })
-  }
+  const pokedex = pokemonList.map(({ name, id, weight, height }) => {
+    return <Pokemon key={id} name={name} idPokemon={id} height={height} weight={weight} />
+  })
 
   return (
     <div className={styles.intro}>
-      <div>Bienvenue sur ton futur pokédex !</div>
-      <div>Tu vas pouvoir apprendre tout ce qu'il faut sur React et attraper des pokemons !</div>
-      <label htmlFor="pokemonFilter">
-        Enter name or id :
-        <input
-          className={styles.input}
-          onChange={onInputChange}
-          value={pokemonFilterValue}
-          id="pokemonFilter"
-          placeholder="squirtle or 7"
-        />
-      </label>
-      {filterPokemonsByNameorId(pokemonList, pokemonFilterValue)}
+      <h1>Pokedex</h1>
+      <div className={styles.pokedex}>{pokedex}</div>
     </div>
   )
 }
