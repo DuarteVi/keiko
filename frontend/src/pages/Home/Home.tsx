@@ -1,38 +1,35 @@
 import styles from "./Home.module.css"
 import { Pokemon } from "components/Pokemon"
-import React from "react"
+import React, { useState, useEffect } from "react"
 
-interface Pokemon {
+interface PokemonInfo {
   name: string
   id: number
+  height: number
+  weight: number
 }
 
 export const Home = () => {
-  const [pokemonFilterValue, setFilterValue] = React.useState("")
+  const [pokemonFilterValue, setFilterValue] = useState("")
 
-  console.log(setFilterValue)
+  const [pokemonList, updatePokemonList] = useState<PokemonInfo[]>([])
+
+  function fetchPokemons() {
+    return fetch("http://localhost:8000/pokemons", { headers: { accept: "application/json" } }).then(response =>
+      response.json(),
+    )
+  }
+
+  useEffect(() => {
+    fetchPokemons().then(updatePokemonList)
+  }, [])
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value)
     setFilterValue(event.target.value)
   }
 
-  const pokemonList = [
-    {
-      name: "Carapuce",
-      id: 7,
-    },
-    {
-      name: "Carabaffe",
-      id: 8,
-    },
-    {
-      name: "Tortank",
-      id: 9,
-    },
-  ]
-
-  function filterPokemonsByNameorId(pokemons: Pokemon[], filter: string) {
+  function filterPokemonsByNameorId(pokemons: PokemonInfo[], filter: string) {
     return pokemonList.map(({ name, id }) => {
       if (name.toUpperCase().startsWith(filter.toUpperCase()) || id.toString().startsWith(filter))
         return <Pokemon key={id} name={name} idPokemon={id} />
