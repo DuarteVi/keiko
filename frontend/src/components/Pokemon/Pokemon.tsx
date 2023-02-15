@@ -1,9 +1,10 @@
 interface Props {
   name: string
-  idPokemon: string
+  idPokemon: number
 }
 
 export const Pokemon = ({ name, idPokemon }: Props) => {
+  console.log(name)
   return (
     <div>
       <img
