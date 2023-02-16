@@ -12,7 +12,7 @@ export const Pokemon = ({ name, idPokemon, weight, height }: Props) => {
       <p>{name}</p>
       <img
         src={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + idPokemon + ".png"}
-        alt={name}
+        alt=""
       />
       <p>Id: {idPokemon}</p>
       <p>Weight: {weight}</p>
