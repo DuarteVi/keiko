@@ -1,6 +1,6 @@
 import styles from "./Home.module.css"
 import { Pokemon } from "components/Pokemon"
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 
 interface PokemonInfo {
   name: string
@@ -9,18 +9,20 @@ interface PokemonInfo {
   weight: number
 }
 
-export const Home = () => {
-  const [pokemonFilterValue, setFilterValue] = useState("")
+const fetchPokemon = async () => {
+  const response = await fetch("http://localhost:8000/pokemons", { headers: { accept: "application/json" } })
+  return response.json()
+}
 
+export const Home = () => {
   const [pokemonList, updatePokemonList] = useState<PokemonInfo[]>([])
 
-  async function fetchPokemons() {
-    const response = await fetch("http://localhost:8000/pokemons", { headers: { accept: "application/json" } })
-    return response.json()
-  }
-
   useEffect(() => {
-    fetchPokemons().then(updatePokemonList)
+    const fetchData = async () => {
+      const res = await fetchPokemon()
+      updatePokemonList(res)
+    }
+    fetchData().catch(console.error)
   }, [])
 
   const pokedex = pokemonList.map(({ name, id, weight, height }) => {

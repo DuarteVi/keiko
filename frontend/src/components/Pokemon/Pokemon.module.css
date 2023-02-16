@@ -5,3 +5,7 @@
   padding: 1rem;
   width: 200px;
 }
+
+.pokemon p:first-child {
+  text-transform: capitalize;
+}
